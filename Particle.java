@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 
 public class Particle extends JPanel {
     //Values of a particle
@@ -9,6 +8,7 @@ public class Particle extends JPanel {
     private int y;
     private int xVelocity;
     private int yVelocity;
+    private int radius;
 
 
     public Particle(String side, String color) {
@@ -31,11 +31,57 @@ public class Particle extends JPanel {
             x = 725 + (int) (50 * Math.random());
             y = 737 + (int) (50 * Math.random());
         }
-    }
+    }//END constructor
 
     public void update(boolean openDoor) {
 
-    }
+        //Update side to determine behavior
+        if (getX() + getRadius() <= 500) {
+            this.side = "Left";
+        }
+        else {
+            this.side = "Right";
+        }
+
+        //Update ball position
+        this.x += xVelocity;
+        this.y += yVelocity;
+
+        if (getSide().equals("Left")) {
+            if (!openDoor || y < 618 || y > 855) {
+                if (x + getRadius() + xVelocity >= 500) {
+                    xVelocity *= -1;
+                }
+            }//END if hitting right side
+            if (x + radius + xVelocity <= 50) {
+                xVelocity *= -1;
+            }//END hitting left side
+            if (y + radius + yVelocity >= 975) {
+                yVelocity *= -1;
+            }//END hitting top
+            if (y + radius + yVelocity <= 500 ) {
+                yVelocity *= -1;
+            }
+        }//END left side check
+
+        if (getSide().equals("Left")) {
+            if (!openDoor || y < 618 || y > 855) {
+                if (x + getRadius() + xVelocity <= 500) {
+                    xVelocity *= -1;
+                }
+            }//END if hitting left side
+            if (x + radius + xVelocity >= 900) {
+                xVelocity *= -1;
+            }//END hitting right side
+            if (y + radius + yVelocity >= 975) {
+                yVelocity *= -1;
+            }//END hitting top
+            if (y + radius + yVelocity <= 500 ) {
+                yVelocity *= -1;
+            }
+        }//END ride side check
+
+    }//END update
 
     public int randomDirection() {
         double rando = Math.random();
@@ -47,21 +93,24 @@ public class Particle extends JPanel {
             direction = -1;
         }
         return direction;
-    }
+    }//END random direction
 
     public void setTemp() {
         double magnitude;
+        //Magnitude is the square root of the sums of component vectors
         magnitude = Math.sqrt(Math.pow(xVelocity, 2) + Math.pow(yVelocity, 2));
         temp = magnitude;
-    }//Magnitude is the square root of the sums of component vectors
+    }//END setTemp
 
-    public double getTemp() {return temp};
+    public double getTemp() {return temp;};
 
     public String getSide() {return side;}
 
     public int getX() {return x;}
 
     public int getY() {return y;}
+
+    public int getRadius() {return radius;}
 }//END particle
 
 

@@ -154,7 +154,7 @@ public class GameBoard extends JPanel {
         //check status of door
         if (doorOpen) {
             g.setColor(getBackground());
-            g.fillRect(500, 625, 3, 237);
+            g.fillRect(500, 618, 3, 237);
         }//END if doorOpen
 
         //Now paint particles
