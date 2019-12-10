@@ -165,11 +165,11 @@ public class GameBoard extends JPanel {
             if (ball.getSide() == "Left")
             {
                 counterHotLeft++;
-                leftAverageTemp += ball.getTemp() * ball.getTemp;
+                leftAverageTemp += ball.getTemp() * ball.getTemp();
             }//increment this counter
             else {
                 counterHotRight++;
-                rightAverageTemp += ball.getTemp() * ball.getTemp;
+                rightAverageTemp += ball.getTemp() * ball.getTemp();
             }
         }//END hot ones
 
@@ -177,14 +177,14 @@ public class GameBoard extends JPanel {
         g.setColor(Color.blue);
         for (Particle ball : coldOnes) {
             g.fillOval(ball.getX(), ball.getY(), 16, 16);
-            if (ball.getSide == "Left")
+            if (ball.getSide() == "Left")
             {
                 counterColdLeft++;
-                leftAverageTemp += ball.getTemp() * ball.getTemp;
+                leftAverageTemp += ball.getTemp() * ball.getTemp();
             }//increment this counter
             else {
                 counterColdRight++;
-                rightAverageTemp += ball.getTemp() * ball.getTemp;
+                rightAverageTemp += ball.getTemp() * ball.getTemp();
             }
         }//END cold ones
 
