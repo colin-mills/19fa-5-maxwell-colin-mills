@@ -119,7 +119,8 @@ public class GameBoard extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Now that everything is set pass to thread so action listeners can report
-        Runnable myRun = new GamePlayRunnable();
+        Runnable myRun = new GamePlayRunnable(gamePanel, tempLeft, tempRight, hotLeft,
+                hotRight, coldLeft, coldRight);
         Thread myThread = new Thread(myRun);
         //Passes client handling responsibilities to new thread
         myThread.start();
@@ -128,20 +129,127 @@ public class GameBoard extends JPanel {
 
     public static void addParticlesToGame() {
         Particle one = new Particle("Left", "Red");
+        hotOnes.addElement(one);
         Particle two = new Particle("Left", "Blue");
+        coldOnes.addElement(two);
         Particle three = new Particle("Right", "Red");
+        hotOnes.addElement(three);
         Particle four = new Particle("Right", "Blue");
-
+        coldOnes.addElement(four);
     }//END addParticles
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        //reset counters
+        counterColdLeft = 0;
+        counterHotLeft = 0;
+        counterColdRight = 0;
+        counterHotRight = 0;
+
+        g.setColor(Color.black);
+        //middle line
+        g.fillRect(500, 500, 3, 475);
+        //check status of door
+        if (doorOpen) {
+            g.setColor(getBackground());
+            g.fillRect(500, 625, 3, 237);
+        }//END if doorOpen
+
+        //Now paint particles
+        //Red first
+        g.setColor(Color.red);
+        for (Particle ball : hotOnes) {
+            g.fillOval(ball.getX(), ball.getY(), 16, 16);
+            if (ball.getSide() == "Left")
+            {
+                counterHotLeft++;
+                leftAverageTemp += ball.getTemp() * ball.getTemp;
+            }//increment this counter
+            else {
+                counterHotRight++;
+                rightAverageTemp += ball.getTemp() * ball.getTemp;
+            }
+        }//END hot ones
+
+        //blue now
+        g.setColor(Color.blue);
+        for (Particle ball : coldOnes) {
+            g.fillOval(ball.getX(), ball.getY(), 16, 16);
+            if (ball.getSide == "Left")
+            {
+                counterColdLeft++;
+                leftAverageTemp += ball.getTemp() * ball.getTemp;
+            }//increment this counter
+            else {
+                counterColdRight++;
+                rightAverageTemp += ball.getTemp() * ball.getTemp;
+            }
+        }//END cold ones
+
+    }//END paintComponent
+
     public static class GamePlayRunnable implements Runnable {
+        GameBoard gamePanel;
+        JLabel tempLeft;
+        JLabel tempRight;
+        JLabel hotLeft;
+        JLabel hotRight;
+        JLabel coldLeft;
+        JLabel coldRight;
 
-
+        GamePlayRunnable(GameBoard gamePanel, JLabel tempLeft, JLabel tempRight, JLabel hotLeft, JLabel hotRight,
+                         JLabel coldLeft, JLabel coldRight) {
+            this.gamePanel = gamePanel;
+            this.tempLeft = tempLeft;
+            this.tempRight = tempRight;
+            this.hotLeft = hotLeft;
+            this.hotRight = hotRight;
+            this.coldLeft = coldLeft;
+            this.coldRight = coldRight;
+        }
         /***/
         @Override
         public void run() {
+            //first particles
+            addParticlesToGame();
+
+            boolean running = true;
+
+            while (running) {
+                //update all particles
+                for (Particle ball : hotOnes) {
+                    ball.update(doorOpen);
+                }//END hotOnes
+
+                for (Particle ball : coldOnes) {
+                    ball.update(doorOpen);
+                }//END coldOnes
+
+                //repaint screem
+                gamePanel.repaint();
+
+                tempLeft.setText("Temp: " + leftAverageTemp);
+                tempRight.setText("Temp: " + rightAverageTemp);
+                hotLeft.setText("# Hot: " + counterHotLeft);
+                hotRight.setText("# Hot: " + counterHotRight);
+                coldLeft.setText("# Cold: " + counterColdLeft);
+                coldRight.setText("# Cold: " + counterColdRight);
+
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.out.println("Unknown error in thread.");
+                }
+
+
+            }//END while running
 
         }//END run()
 
     }//END GamePlayRunnable
+
 }//END JPanel
