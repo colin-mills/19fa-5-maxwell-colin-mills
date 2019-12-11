@@ -154,7 +154,7 @@ public class GameBoard extends JPanel {
         g.fillRect(500, 0, 3, 400);
         //check status of door
         if (doorOpen) {
-            g.setColor(Color.white);
+            g.setColor(getBackground());
             g.fillRect(500, 100, 3, 200);
         }//END if doorOpen
 
@@ -188,6 +188,9 @@ public class GameBoard extends JPanel {
                 rightAverageTemp +=  Math.pow(ball.getTemp(), 2);
             }
         }//END cold ones
+
+        leftAverageTemp = leftAverageTemp / (counterColdLeft + counterHotLeft);
+        rightAverageTemp = rightAverageTemp / (counterHotRight + counterColdRight);
 
     }//END paintComponent
 
