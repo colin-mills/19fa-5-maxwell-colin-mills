@@ -8,7 +8,7 @@ public class Particle extends JPanel {
     private int y;
     private int xVelocity;
     private int yVelocity;
-    private int radius;
+    private int radius = 8;
 
 
     public Particle(String side, String color) {
@@ -24,19 +24,19 @@ public class Particle extends JPanel {
         setTemp();
 
         if (side.equals("Left")) {
-            x = 225 + (int) (50 * Math.random()); //Middle area random spawn
-            y = 737 + (int) (50 * Math.random());
+            x = 225 + (int) (30 * Math.random()); //Middle area random spawn
+            y = 200 + (int) (30 * Math.random());
         }
         else {
-            x = 725 + (int) (50 * Math.random());
-            y = 737 + (int) (50 * Math.random());
+            x = 725 + (int) (30 * Math.random());
+            y = 200 + (int) (30 * Math.random());
         }
     }//END constructor
 
     public void update(boolean openDoor) {
 
         //Update side to determine behavior
-        if (getX() + getRadius() <= 500) {
+        if ((getX() + getRadius()) <= 500) {
             this.side = "Left";
         }
         else {
@@ -48,37 +48,37 @@ public class Particle extends JPanel {
         this.y += yVelocity;
 
         if (getSide().equals("Left")) {
-            if (!openDoor || y < 618 || y > 855) {
+            if (!openDoor || y > 300 || y < 100) {
                 if (x + getRadius() + xVelocity >= 500) {
                     xVelocity *= -1;
                 }
             }//END if hitting right side
-            if (x + radius + xVelocity <= 50) {
+            if (x <= 0) {
                 xVelocity *= -1;
             }//END hitting left side
-            if (y + radius + yVelocity >= 975) {
+            if (y + radius * 2 >= 400) {
                 yVelocity *= -1;
             }//END hitting top
-            if (y + radius + yVelocity <= 500 ) {
+            if (y <= 0 ) {
                 yVelocity *= -1;
             }
         }//END left side check
 
-        if (getSide().equals("Left")) {
-            if (!openDoor || y < 618 || y > 855) {
-                if (x + getRadius() + xVelocity <= 500) {
+        if (getSide().equals("Right")) {
+            if (!openDoor || y > 300 || y < 100) {
+                if (x <= 500) {
                     xVelocity *= -1;
                 }
             }//END if hitting left side
-            if (x + radius + xVelocity >= 900) {
+            if (x + radius * 2 >= 900) {
                 xVelocity *= -1;
             }//END hitting right side
-            if (y + radius + yVelocity >= 975) {
+            if (y + radius * 2 >= 400) {
                 yVelocity *= -1;
             }//END hitting top
-            if (y + radius + yVelocity <= 500 ) {
+            if (y <= 0 ) {
                 yVelocity *= -1;
-            }
+            }//END hitting bottom
         }//END ride side check
 
     }//END update
