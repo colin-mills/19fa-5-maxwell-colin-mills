@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+/**
+ * @author Colin Mills
+ */
 public class Particle extends JPanel {
     //Values of a particle
     private double temp;
@@ -10,7 +13,14 @@ public class Particle extends JPanel {
     private int yVelocity;
     private int radius = 8;
 
-
+    /**
+     * Constructor that gets the particle moving
+     * randomly assigns directions
+     * randomly assigns speeds for red between 4-6 and for blue between 2-4
+     * randomly assigns starting position of ball to allow variety of paths
+     * @param side Lets Particle know which side to spawn the ball on
+     * @param color Lets Particle know if it should make a red or blue
+     */
     public Particle(String side, String color) {
         this.side = side;
         if (color.equals("Blue")) {
@@ -33,6 +43,10 @@ public class Particle extends JPanel {
         }
     }//END constructor
 
+    /**
+     * Called every 15 milliseconds by runnable to update position of balls
+     * @param openDoor affects behavior if door is open or closed
+     */
     public void update(boolean openDoor) {
 
         //Update side to determine behavior
@@ -83,6 +97,10 @@ public class Particle extends JPanel {
 
     }//END update
 
+    /**
+     * allows constructor to assign direction randomly
+     * @return either positive or negative direction
+     */
     public int randomDirection() {
         double rando = Math.random();
         int direction;
@@ -95,6 +113,10 @@ public class Particle extends JPanel {
         return direction;
     }//END random direction
 
+    /**
+     * sets temp so thread can call for this value
+     * temp as determined as magnitude of vector
+     */
     public void setTemp() {
         double magnitude;
         //Magnitude is the square root of the sums of component vectors
@@ -102,14 +124,34 @@ public class Particle extends JPanel {
         temp = magnitude;
     }//END setTemp
 
+    /**
+     * passes temp to Thread
+     * @return returns magnitude
+     */
     public double getTemp() {return temp;};
 
+    /**
+     * Useful for counter in Thread
+     * @return "Left" or "Right"
+     */
     public String getSide() {return side;}
 
+    /**
+     * position used for paint
+     * @return x coordinate withing gamespace
+     */
     public int getX() {return x;}
 
+    /**
+     * position used for paint
+     * @return y coordinate withing gamespace
+     */
     public int getY() {return y;}
 
+    /**
+     * Accesor method for radius
+     * @return if length and width are 16 radius will always be 8
+     */
     public int getRadius() {return radius;}
 }//END particle
 

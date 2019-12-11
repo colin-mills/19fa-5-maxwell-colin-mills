@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 
+/**
+ * @author Colin Mills
+ */
 public class GameBoard extends JPanel {
 
     //keep track of # of particles and where
@@ -19,6 +22,10 @@ public class GameBoard extends JPanel {
     //Keep track if that door is open
     static Boolean doorOpen = false; //Initiate it as NOT open
 
+    /**
+     * This is the main fxn in the program designed to implement java swing GUI elements and pass all responsibilities
+     * @param args there are no command line arguments
+     */
     public static void main(String[] args) {
         //frame for game place
         JFrame frame = new JFrame();
@@ -72,7 +79,6 @@ public class GameBoard extends JPanel {
                 addParticlesToGame();
             }
         }); //END define what to do if pressed add
-
         mainPanel.add(addParticles); //Add add to panel
 
         JButton reset = new JButton("Reset");
@@ -84,7 +90,6 @@ public class GameBoard extends JPanel {
                 coldOnes.clear();
             }
         }); //END define what to do if pressed reset
-
         mainPanel.add(reset); //Add reset to panel
 
         //Set game board
@@ -127,6 +132,10 @@ public class GameBoard extends JPanel {
 
     }//END main
 
+    /**
+     * This is called by the thread in order to add particles to the game
+     * Creates 2 on either side, hot and cold
+     */
     public static void addParticlesToGame() {
         Particle one = new Particle("Left", "Red");
         hotOnes.addElement(one);
@@ -138,6 +147,11 @@ public class GameBoard extends JPanel {
         coldOnes.addElement(four);
     }//END addParticles
 
+    /**
+     * Overridden paintComponent so that we paint what we want
+     * calls super to do proper initialization
+     * @param g this guy is good at drawing things :-)
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -174,7 +188,7 @@ public class GameBoard extends JPanel {
             }
         }//END hot ones
 
-        //blue now
+        //now blue
         g.setColor(Color.blue);
         for (Particle ball : coldOnes) {
             g.fillOval(ball.getX(), ball.getY(), 16, 16);
@@ -189,11 +203,17 @@ public class GameBoard extends JPanel {
             }
         }//END cold ones
 
+        //Compute temp as average
         leftAverageTemp = leftAverageTemp / (counterColdLeft + counterHotLeft);
         rightAverageTemp = rightAverageTemp / (counterHotRight + counterColdRight);
 
     }//END paintComponent
 
+    /**
+     * Runnable that keeps the game going
+     * Updates every 15 milliseconds
+     * This handles the game updates so that main can listen for user action
+     */
     public static class GamePlayRunnable implements Runnable {
         GameBoard gamePanel;
         JLabel tempLeft;
@@ -203,6 +223,16 @@ public class GameBoard extends JPanel {
         JLabel coldLeft;
         JLabel coldRight;
 
+        /**
+         * Runnable constructor that is passed all of these objects which are otherwise out of scope
+         * @param gamePanel
+         * @param tempLeft
+         * @param tempRight
+         * @param hotLeft
+         * @param hotRight
+         * @param coldLeft
+         * @param coldRight
+         */
         GamePlayRunnable(GameBoard gamePanel, JLabel tempLeft, JLabel tempRight, JLabel hotLeft, JLabel hotRight,
                          JLabel coldLeft, JLabel coldRight) {
             this.gamePanel = gamePanel;
@@ -213,7 +243,10 @@ public class GameBoard extends JPanel {
             this.coldLeft = coldLeft;
             this.coldRight = coldRight;
         }
-        /***/
+
+        /**
+         * runnable passed to a thread in main
+         */
         @Override
         public void run() {
             //first particles
@@ -233,7 +266,6 @@ public class GameBoard extends JPanel {
 
                 //repaint stats
                 gamePanel.repaint();
-
                 tempLeft.setText("Temp: " + Math.round(leftAverageTemp));
                 tempRight.setText("Temp: " + Math.round(rightAverageTemp));
                 hotLeft.setText("# Hot: " + counterHotLeft);
@@ -245,15 +277,12 @@ public class GameBoard extends JPanel {
                     Thread.sleep(15);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    running = false;
                 } catch (Exception e) {
                     System.out.println("Unknown error in thread.");
+                    running = false;
                 }
-
-
             }//END while running
-
         }//END run()
-
     }//END GamePlayRunnable
-
 }//END JPanel
