@@ -36,7 +36,7 @@ public class Particle extends JPanel {
     public void update(boolean openDoor) {
 
         //Update side to determine behavior
-        if ((getX() + getRadius()) <= 500) {
+        if ((getX() + getRadius()) <= 450) {
             this.side = "Left";
         }
         else {
@@ -49,7 +49,7 @@ public class Particle extends JPanel {
 
         if (getSide().equals("Left")) {
             if (!openDoor || y > 300 || y < 100) {
-                if (x + getRadius() + xVelocity >= 500) {
+                if (x + getRadius() + xVelocity >= 450) {
                     xVelocity *= -1;
                 }
             }//END if hitting right side
@@ -66,7 +66,7 @@ public class Particle extends JPanel {
 
         if (getSide().equals("Right")) {
             if (!openDoor || y > 300 || y < 100) {
-                if (x <= 500) {
+                if (x <= 450) {
                     xVelocity *= -1;
                 }
             }//END if hitting left side

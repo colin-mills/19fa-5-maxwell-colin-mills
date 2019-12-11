@@ -1,0 +1,12 @@
+Instruction to compile and run code:
+1. Clone or download this repository to your local machine
+2. Through the terminal, navigate to this repository
+3. Assuming you have a JVM on your computer input the command: javac GameBoard.java
+4. Next enter command: java GameBoard
+5. Enjoy!
+
+Instructions to play the game:
+1: Press the "Add Particles" button to add particles to either side
+2: Press reset to remove all balls and start over
+3: Add as many particles as desired to increase difficulty level
+4: Get all the balls of the same color on the same sides!
